@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np 
 import random
 import math
-from scipy import sparse
+
 from utils.logger import get_logger
 
 
@@ -24,7 +24,7 @@ create_matrix_by_trainset
 '''
 
 def readdata(filename,sep):
-    rnames = ['user_id','item_id','rating']
+    rnames = ['user_id','item_id','rating','review']
     ratings = pd.read_table(filename,sep=sep,header=None,names=rnames)
     return ratings
 
@@ -70,10 +70,10 @@ def replace_user_and_item(ratings):
     items = list(set(ratings['item_id']))
     l = []
     for row in ratings.itertuples():
-        t = (users.index(row[1]),items.index(row[2]),row[3])
+        t = (users.index(row[1]),items.index(row[2]),row[3],row[4])
         l.append(t)
     df = pd.DataFrame(l)
-    df.columns = ['user_id', 'item_id', 'rating']
+    df.columns = ['user_id', 'item_id', 'rating','review']
     #这里有没有必要？  
     #df = df.sort_values(by=['user_id','item_id'])
     return df,users,items 
@@ -138,3 +138,5 @@ def create_train_list(trainset):
 '''
 def create_train_array(trainset):
     return trainset.as_matrix()
+
+
