@@ -52,10 +52,11 @@ exit()
 
 #5. 训练
 # (self,a,users,items,k,t,alpha,lamda)
-MF = bmf.Bmf(train_list,users,items,5,20,0.1,0.2)
-u,v,bu,bi,ave= MF.train_by_list()
+MF = bmf.Bmf(train_list,testset,users,items,5,30,0.2,0.4)
+u,v,bu,bi,mu= MF.train_by_list()
 
 
+'''
 #6. 获取预测列表
 prediction_list = MF.prediction(testset)
 prediction_df = pd.DataFrame(prediction_list)
@@ -71,4 +72,4 @@ logger.info("result has been put in "+outpath)
 
 #8. 结果报告
 
-
+'''

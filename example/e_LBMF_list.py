@@ -10,10 +10,10 @@ import numpy as np
 
 logger = get_logger('e_LBMF_list')
 
-filename = 'j:/amazon/output/Arts@uir.csv'
+filename = 'e:/data/ml-1m/ratings.csv'
 dataname = filename.split('/')[-1]
 #outpath
-outpath = 'j:/amazon/result/result10/'
+outpath = 'e:/data/ml-1m/'
 #0.读取数据
 ratings = preprocess.readdata(filename,',')
 #1.判断是否有重复元素，如果有，去除重复元素
@@ -56,7 +56,7 @@ exit()
 '''
 
 #5. 训练
-MF = lbmf.Lbmf(train_list,users,items,5,20,0.9,0.01)
+MF = lbmf.Lbmf(train_list,testset,users,items,5,30,1.0,0.01)
 u,v,bu,bi,global_bias = MF.train_by_list()
 
 #5.1 模型保存
@@ -69,6 +69,8 @@ u_pd.to_csv(outpath+'user_feature'+'_'+dataname,index=None,header=None)
 v_pd.to_csv(outpath+'item_feature'+'_'+dataname,index=None,header=None)
 bu_pd.to_csv(outpath+'bu_feature'+'_'+dataname,index=None,header=None)
 bi_pd.to_csv(outpath+'bi_feature'+'_'+dataname,index=None,header=None)
+
+'''
 
 '''
 #6. 获取预测列表
@@ -92,3 +94,4 @@ df.to_csv(outpath+'predictionList'+'_'+dataname,index=None,header=None)
 mse = MF.evaluation(prediction_list,testset)
 logger.info("MSE:"+str(mse))
 logger.info("result has been put in "+outpath)
+'''

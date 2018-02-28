@@ -4,14 +4,14 @@ sys.path.append("..")
 from utils.logger import get_logger
 from preprocess import preprocess
 from textblob import TextBlob 
-from model import stmf
+from model import blstmf
 import collections
 import numpy as np 
 import pandas as pd
 
 
 
-logger = get_logger('e_STMF')
+logger = get_logger('e_BLSTMF')
 
 
 filename = 'j:/amazon/output2/Arts@uirr.csv'
@@ -85,11 +85,6 @@ print(item_review_l[0][1])
 #lda 输出
 
 
-
-
-
-
-
 trainfile = '../data/trainset_Arts@uirr.csv'
 train_df = preprocess.readdata(trainfile,',')
 train_list = preprocess.create_train_list(train_df)
@@ -98,17 +93,21 @@ testset_df = pd.read_csv('../data/testset_Arts@uirr.csv',header=None)
 
 #构建两个字典，分别是用户-情感向量，物品-topic向量
 
-#1. 构建字典user-pref矩阵
+#1. 构建字典user-pref
 uisv_names = ['user','item','sentiment','vector','pref']
-uisv_df = pd.read_csv('../data/out/uisv.csv',header=None,names=uisv_names)
+uisv_df = pd.read_csv('../data/out3/uisv3.csv',header=None,names=uisv_names)
 user_l = uisv_df['user'].tolist()
 pref_l = uisv_df['pref'].tolist()
 
+pref_l_eval = []
+for row in pref_l:
+	pref_l_eval.append(eval(row))
 
-u_dict = dict(zip(user_l,pref_l))
+
+u_dict = dict(zip(user_l,pref_l_eval))
 
 
-#2 构建item-vertor矩阵
+#2 构建字典item-vertor
 doc_topic_df = pd.read_csv('../data/out/doc_topic.csv',header=None)
 item_review_df = pd.read_csv('../data/out/item_review.csv',header=None)
 
@@ -121,8 +120,8 @@ v_dict = dict(zip(item_id_l,doc_topic_l))
 
 
 # 5. 训练
-STMF = stmf.STMF(train_list,testset_df,u_dict,v_dict,5,20,0.05,0.02)
-u,v,bu,bi,ave= STMF.train_by_list()
+BLSTMF = blstmf.BLSTMF(train_list,testset_df,u_dict,v_dict,5,30,0.6,0.05)
+wu,vv,v,bu,bi,ave= BLSTMF.train_by_list()
 
 
 

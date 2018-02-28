@@ -26,6 +26,9 @@ create_matrix_by_trainset
 def readdata(filename,sep):
     rnames = ['user_id','item_id','rating','review']
     ratings = pd.read_table(filename,sep=sep,header=None,names=rnames)
+    if(len(ratings) > 20000):
+        percent = 20000 / len(ratings)
+        ratings = ratings.sample(frac=percent)
     return ratings
 
 
@@ -119,7 +122,7 @@ def create_matrix_by_trainset(trainset,m,n):
     return matrix
 
 '''
-@desc:根据trainset构建一个形如[[(x,y),v]]的列表，其中(x,y)是坐标，代表user_id,item_id。v是评分。
+@desc:根据trainset构建一个形如[[(x,y),v]]的列表，其中(x,y)是坐标，代表user_id,item_id v是评分。
 @param:trainset
 @return:train_list(python内置list)
 '''

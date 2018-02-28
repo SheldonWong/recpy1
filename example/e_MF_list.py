@@ -43,9 +43,9 @@ for row in trainset.itertuples():
 
 #5. 训练
 MF = lmf.Lmf()
-u,v,b = MF.train_by_log(l,5,m,n)
+u,v = MF.train_by_list(l,testset,5,m,n)
 
-
+'''
 #6. 获取预测列表
 prediction_list = MF.prediction(u,v,b,testset)
 df = pd.DataFrame(prediction_list)
@@ -55,3 +55,4 @@ df = pd.DataFrame(prediction_list)
 #7. 评测
 mse = MF.evaluation(prediction_list,testset)
 logger.info("MSE:"+str(mse))
+'''

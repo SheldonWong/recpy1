@@ -4,7 +4,7 @@ sys.path.append("..")
 from utils.logger import get_logger
 from preprocess import preprocess
 from textblob import TextBlob 
-from model import stmf
+from model import lstmf
 import collections
 import numpy as np 
 import pandas as pd
@@ -84,12 +84,6 @@ print(item_review_l[0][1])
 
 #lda 输出
 
-
-
-
-
-
-
 trainfile = '../data/trainset_Arts@uirr.csv'
 train_df = preprocess.readdata(trainfile,',')
 train_list = preprocess.create_train_list(train_df)
@@ -100,7 +94,7 @@ testset_df = pd.read_csv('../data/testset_Arts@uirr.csv',header=None)
 
 #1. 构建字典user-pref矩阵
 uisv_names = ['user','item','sentiment','vector','pref']
-uisv_df = pd.read_csv('../data/out/uisv.csv',header=None,names=uisv_names)
+uisv_df = pd.read_csv('../data/out3/uisv3.csv',header=None,names=uisv_names)
 user_l = uisv_df['user'].tolist()
 pref_l = uisv_df['pref'].tolist()
 
@@ -121,10 +115,13 @@ v_dict = dict(zip(item_id_l,doc_topic_l))
 
 
 # 5. 训练
-STMF = stmf.STMF(train_list,testset_df,u_dict,v_dict,5,20,0.05,0.02)
-u,v,bu,bi,ave= STMF.train_by_list()
+LSTMF = lstmf.LSTMF(train_list,testset_df,u_dict,v_dict,5,30,0.5,0.02)
+u,v,bu,bi,ave= LSTMF.train_by_list()
 
 
+prediction_list = LSTMF.prediction(testset_df)
+prediction_df = pd.DataFrame(prediction_list)
+prediction_df.to_csv('../data/out3/result.csv',index=None,header=None)
 
 
 '''
